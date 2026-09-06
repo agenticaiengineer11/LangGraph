@@ -8,6 +8,7 @@ class State(TypedDict):
     analysis: str
     answer: str
     final_response: str
+    summarized_response: str
 
 
 def question_analyzer(state: State):
@@ -39,6 +40,14 @@ def formatter(state: State):
             f"Answer: {state['answer']}"
         )
     }
+def summarizer(state: State):
+    print("Summarizing response...")
+    return {
+        "summarized_response": (
+            f"Question: {state['question']}\n\n"
+            f"Answer: {state['answer']}"
+        )
+    }
 
 
 graph = StateGraph(State)
@@ -46,11 +55,13 @@ graph = StateGraph(State)
 graph.add_node("question_analyzer", question_analyzer)
 graph.add_node("answer_generator", answer_generator)
 graph.add_node("formatter", formatter)
+graph.add_node("summarizer", summarizer)
 
 graph.add_edge(START, "question_analyzer")
 graph.add_edge("question_analyzer", "answer_generator")
 graph.add_edge("answer_generator", "formatter")
-graph.add_edge("formatter", END)
+graph.add_edge("formatter", "summarizer")
+graph.add_edge("summarizer", END)
 
 app = graph.compile()
 
@@ -59,10 +70,11 @@ initial_state = {
     "question": "What is LangGraph?",
     "analysis": "",
     "answer": "",
-    "final_response": ""
+    "final_response": "",
+    "summarized_response": ""
 }
 
 result = app.invoke(initial_state)
 
 print("\n--- FINAL RESULT ---")
-print(result["final_response"])
+print(result["summarized_response"])
