@@ -95,7 +95,12 @@ for message in result["messages"]:
         for tool_call in message.tool_calls:
             print(tool_call)
 
+png_data = graph.get_graph().draw_mermaid_png()
 
+with open("day5_graph.png", "wb") as f:
+    f.write(png_data)
+
+print("Graph image saved as day5_graph.png")
 print("\n===================================")
 print("FINAL RESPONSE")
 print("===================================")
