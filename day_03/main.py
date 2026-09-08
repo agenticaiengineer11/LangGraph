@@ -8,11 +8,6 @@ class State(TypedDict):
     analysis: str
     final_response: str
 
-
-# -------------------------
-# Node 1: Analyze Product
-# -------------------------
-
 def product_analyzer(state: State):
     print("Analyzing product demand...")
 
@@ -22,12 +17,6 @@ def product_analyzer(state: State):
             f"Demand Score - {state['demand_score']}"
         )
     }
-
-
-# -------------------------
-# Router: Decide Path
-# -------------------------
-
 def demand_router(state: State):
     print("Calculating demand score...")
 
@@ -90,12 +79,7 @@ graph.add_node("moderate_analysis", moderate_analysis)
 graph.add_node("poor_analysis", poor_analysis)
 graph.add_node("formatter", formatter)
 
-
-# START → Product Analyzer
 graph.add_edge(START, "product_analyzer")
-
-
-# Product Analyzer → Conditional Router
 graph.add_conditional_edges(
     "product_analyzer",
     demand_router,
@@ -105,19 +89,11 @@ graph.add_conditional_edges(
         "poor": "poor_analysis"
     }
 )
-
-
-# All analysis paths → Formatter
 graph.add_edge("excellent_analysis", "formatter")
 graph.add_edge("moderate_analysis", "formatter")
 graph.add_edge("poor_analysis", "formatter")
-
-
-# Formatter → END
 graph.add_edge("formatter", END)
 
-
-# Compile Graph
 app = graph.compile()
 
 initial_state = {
