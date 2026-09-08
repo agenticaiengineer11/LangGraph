@@ -40,40 +40,22 @@ def llm_node(state: MessagesState):
     }
 
 tool_node = ToolNode(tools)
-
-
-# ==========================================
-# 7. Router
-# ==========================================
-
 def should_continue(state: MessagesState):
 
     last_message = state["messages"][-1]
 
     print("\n--- ROUTER ---")
-
-    # If LLM requested a tool
     if last_message.tool_calls:
         print("Tool call detected.")
         return "tools"
-
-    # Otherwise finish
     print("No tool call detected. Ending.")
     return END
 
 builder = StateGraph(MessagesState)
-
-
-# Add nodes
 builder.add_node("llm", llm_node)
 builder.add_node("tools", tool_node)
 
-
-# START → LLM
 builder.add_edge(START, "llm")
-
-
-# LLM → Router → Tools OR END
 builder.add_conditional_edges(
     "llm",
     should_continue,
@@ -83,8 +65,6 @@ builder.add_conditional_edges(
     }
 )
 
-
-# Tool → LLM
 builder.add_edge("tools", "llm")
 
 graph = builder.compile()
