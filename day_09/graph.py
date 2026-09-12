@@ -2,7 +2,6 @@ from langgraph.graph import StateGraph, START, END, MessagesState
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.messages import HumanMessage, AIMessage
 
-
 def chatbot(state: MessagesState):
 
     messages = state["messages"]
@@ -23,7 +22,6 @@ builder.add_node("chatbot", chatbot)
 
 builder.add_edge(START, "chatbot")
 builder.add_edge("chatbot", END)
-
 checkpointer = InMemorySaver()
 
 app = builder.compile(
@@ -78,8 +76,12 @@ for index, checkpoint in enumerate(history):
 
     print(f"\nCHECKPOINT {index}")
 
+    checkpoint_id = (
+        checkpoint.config["configurable"]["checkpoint_id"]
+    )
+
     print("Checkpoint ID:")
-    print(checkpoint.config["configurable"]["checkpoint_id"])
+    print(checkpoint_id)
 
     print("Messages:")
 
@@ -98,6 +100,34 @@ print("\n========== TIME TRAVEL ==========")
 old_state = app.get_state(old_config)
 
 for message in old_state.values["messages"]:
+    print(
+        f"{message.__class__.__name__}: "
+        f"{message.content}"
+    )
+
+print("\n========== MODIFYING STATE ==========")
+
+modified_config = app.update_state(
+    old_config,
+    {
+        "messages": [
+            HumanMessage(
+                content="This is a modified message."
+            )
+        ]
+    }
+)
+
+print("Modified checkpoint config:")
+print(modified_config)
+
+print("\n========== MODIFIED STATE ==========")
+
+modified_state = app.get_state(
+    modified_config
+)
+
+for message in modified_state.values["messages"]:
     print(
         f"{message.__class__.__name__}: "
         f"{message.content}"
