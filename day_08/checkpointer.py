@@ -1,22 +1,24 @@
 from langgraph.graph import StateGraph, START, END, MessagesState
 from langgraph.checkpoint.memory import InMemorySaver
 from langchain_core.messages import HumanMessage, AIMessage
+from langchain_groq import ChatGroq
+from dotenv import load_dotenv
+load_dotenv()
 
 
+model = ChatGroq(
+    model="openai/gpt-oss-120b",
+    temperature=0
+)
 def chatbot(state: MessagesState):
 
-    messages = state["messages"]
-
-    last_message = messages[-1]
+    response = model.invoke(
+        state["messages"]
+    )
 
     return {
-        "messages": [
-            AIMessage(
-                content=f"You said: {last_message.content}"
-            )
-        ]
+        "messages": [response]
     }
-
 
 builder = StateGraph(MessagesState)
 
@@ -50,7 +52,22 @@ config = {
     }
 }
 
+config_2 = {
+    "configurable": {
+        "thread_id": "user_2"
+    }
+}
 
+result = app.invoke(
+    {
+        "messages": [
+            HumanMessage(
+                content="What is my name?"
+            )
+        ]
+    },
+    config_2
+)
 result = app.invoke(
     {
         "messages": [
@@ -71,7 +88,7 @@ result = app.invoke(
     {
         "messages": [
             HumanMessage(
-                content="What did I just say?"
+                content="What is my name?"
             )
         ]
     },
