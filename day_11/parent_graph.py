@@ -75,8 +75,6 @@ def research_node(state: ParentState):
 
     print("\n===== RESEARCH SUBGRAPH =====")
 
-    # Parent state → Subgraph state
-
     research_input = {
         "query": state["user_query"],
         "sources": "",
