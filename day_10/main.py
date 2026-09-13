@@ -70,7 +70,7 @@ print("\n----- GRAPH PAUSED -----")
 print(result)
 
 
-human_decision = "yes"
+human_decision = "no"
 
 result = app.invoke(
     Command(
