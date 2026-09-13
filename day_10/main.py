@@ -66,5 +66,18 @@ result = app.invoke(
     config
 )
 
-print("\n----- GRAPH RESULT -----")
+print("\n----- GRAPH PAUSED -----")
+print(result)
+
+
+human_decision = "yes"
+
+result = app.invoke(
+    Command(
+        resume=human_decision
+    ),
+    config
+)
+
+print("\n----- GRAPH RESUMED -----")
 print(result)
