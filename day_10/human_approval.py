@@ -158,7 +158,7 @@ print("\n========== GRAPH PAUSED ==========")
 
 print(result)
 
-human_decision = "yes"
+human_decision = "no"
 
 print("\n========== RESUMING GRAPH ==========")
 
