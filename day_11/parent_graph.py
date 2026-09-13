@@ -1,84 +1,123 @@
 from langgraph.graph import StateGraph, START, END
 from typing import TypedDict
 
-class State(TypedDict):
+class ParentState(TypedDict):
     user_query: str
-    analysis: str
     final_report: str
 
-def researcher(state: State):
+class ResearchState(TypedDict):
+    query: str
+    sources: str
+    findings: str
 
-    print("Researcher running...")
+def search_node(state: ResearchState):
+
+    print("\n----- SEARCH NODE -----")
+
+    query = state["query"]
+
+    sources = f"Sources found for: {query}"
+
+    print(sources)
 
     return {
-        "analysis": (
-            f"Research completed for: "
-            f"{state['user_query']}"
-        )
+        "sources": sources
     }
 
+def analysis_node(state: ResearchState):
 
-def analyzer(state: State):
+    print("\n----- ANALYSIS NODE -----")
 
-    print("Analyzer running...")
+    sources = state["sources"]
+
+    findings = f"Analysis based on: {sources}"
+
+    print(findings)
 
     return {
-        "analysis": (
-            f"{state['analysis']} "
-            f"| Analysis completed."
-        )
+        "findings": findings
     }
 
-subgraph_builder = StateGraph(State)
+research_builder = StateGraph(ResearchState)
 
-subgraph_builder.add_node(
-    "researcher",
-    researcher
+
+research_builder.add_node(
+    "search",
+    search_node
 )
 
-subgraph_builder.add_node(
-    "analyzer",
-    analyzer
+
+research_builder.add_node(
+    "analysis",
+    analysis_node
 )
 
-subgraph_builder.add_edge(
+research_builder.add_edge(
     START,
-    "researcher"
+    "search"
 )
 
-subgraph_builder.add_edge(
-    "researcher",
-    "analyzer"
+
+research_builder.add_edge(
+    "search",
+    "analysis"
 )
 
-subgraph_builder.add_edge(
-    "analyzer",
+
+research_builder.add_edge(
+    "analysis",
     END
 )
 
-subgraph = subgraph_builder.compile()
+research_subgraph = research_builder.compile()
 
-def final_report(state: State):
+def research_node(state: ParentState):
 
-    print("Final report running...")
+    print("\n===== RESEARCH SUBGRAPH =====")
 
-    return {
-        "final_report": (
-            f"Final Report: "
-            f"{state['analysis']}"
-        )
+    # Parent state → Subgraph state
+
+    research_input = {
+        "query": state["user_query"],
+        "sources": "",
+        "findings": ""
     }
 
-parent_builder = StateGraph(State)
+    research_result = research_subgraph.invoke(
+        research_input
+    )
+
+    return {
+        "final_report": research_result["findings"]
+    }
+
+def final_report_node(state: ParentState):
+
+    print("\n----- FINAL REPORT NODE -----")
+
+    final_report = (
+        f"Final Report: "
+        f"{state['final_report']}"
+    )
+
+    print(final_report)
+
+    return {
+        "final_report": final_report
+    }
+
+parent_builder = StateGraph(ParentState)
+
 
 parent_builder.add_node(
     "research",
-    subgraph
+    research_node
 )
+
 
 parent_builder.add_node(
     "final_report",
-    final_report
+    final_report_node
 )
 
 parent_builder.add_edge(
@@ -86,10 +125,12 @@ parent_builder.add_edge(
     "research"
 )
 
+
 parent_builder.add_edge(
     "research",
     "final_report"
 )
+
 
 parent_builder.add_edge(
     "final_report",
@@ -101,7 +142,6 @@ app = parent_builder.compile()
 result = app.invoke(
     {
         "user_query": "Analyze LangGraph",
-        "analysis": "",
         "final_report": ""
     }
 )
