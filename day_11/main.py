@@ -6,7 +6,6 @@ class State(TypedDict):
     result: str
 
 def analyzer(state: State):
-
     print("Analyzer running...")
 
     return {
@@ -15,7 +14,6 @@ def analyzer(state: State):
 
 
 def processor(state: State):
-
     print("Processor running...")
 
     return {
