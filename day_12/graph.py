@@ -1,10 +1,8 @@
-from typing import TypedDict
-
-from langgraph.graph import (
-    StateGraph,
-    START,
-    END
-)
+from typing import TypedDict, Literal
+from dotenv import load_dotenv
+load_dotenv()
+from langgraph.graph import StateGraph, START, END
+from langchain_groq import ChatGroq
 
 class AgentState(TypedDict):
     user_query: str
@@ -12,6 +10,23 @@ class AgentState(TypedDict):
     analysis: str
     report: str
     next_agent: str
+
+model = ChatGroq(
+    model="openai/gpt-oss-120b",
+    temperature=0
+)
+
+class SupervisorDecision(TypedDict):
+    next_agent: Literal[
+        "research_agent",
+        "analysis_agent",
+        "report_agent",
+        "FINISH"
+    ]
+
+structured_model = model.with_structured_output(
+    SupervisorDecision
+)
 
 def research_agent(state: AgentState):
 
@@ -38,7 +53,6 @@ def analysis_agent(state: AgentState):
     return {
         "analysis": analysis
     }
-
 def report_agent(state: AgentState):
 
     print("\n----- REPORT AGENT -----")
@@ -54,23 +68,45 @@ def report_agent(state: AgentState):
 
 def supervisor(state: AgentState):
 
-    print("\n----- SUPERVISOR -----")
+    print("\n----- LLM SUPERVISOR -----")
 
-    if not state["research"]:
+    prompt = f"""
+You are the supervisor of a multi-agent system.
 
-        next_agent = "research_agent"
+Your job is to decide which agent should work next.
 
-    elif not state["analysis"]:
+Available agents:
 
-        next_agent = "analysis_agent"
+research_agent:
+Performs research.
 
-    elif not state["report"]:
+analysis_agent:
+Analyzes the research.
 
-        next_agent = "report_agent"
+report_agent:
+Creates the final report.
 
-    else:
+FINISH:
+Use this when the final report is complete.
 
-        next_agent = "FINISH"
+User request:
+{state["user_query"]}
+
+Current research:
+{state["research"]}
+
+Current analysis:
+{state["analysis"]}
+
+Current report:
+{state["report"]}
+
+Choose exactly one next agent.
+"""
+
+    decision = structured_model.invoke(prompt)
+
+    next_agent = decision["next_agent"]
 
     print(
         f"Supervisor decision: {next_agent}"
@@ -92,18 +128,15 @@ builder.add_node(
     supervisor
 )
 
-
 builder.add_node(
     "research_agent",
     research_agent
 )
 
-
 builder.add_node(
     "analysis_agent",
     analysis_agent
 )
-
 
 builder.add_node(
     "report_agent",
@@ -131,12 +164,10 @@ builder.add_edge(
     "supervisor"
 )
 
-
 builder.add_edge(
     "analysis_agent",
     "supervisor"
 )
-
 
 builder.add_edge(
     "report_agent",
