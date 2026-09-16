@@ -1,11 +1,17 @@
 from typing import TypedDict
-from langgraph.graph import StateGraph, START, END
+
+from langgraph.graph import (
+    StateGraph,
+    START,
+    END
+)
 
 class AgentState(TypedDict):
     user_query: str
     research: str
     analysis: str
     report: str
+    next_agent: str
 
 def research_agent(state: AgentState):
 
@@ -45,7 +51,46 @@ def report_agent(state: AgentState):
     return {
         "report": report
     }
+
+def supervisor(state: AgentState):
+
+    print("\n----- SUPERVISOR -----")
+
+    if not state["research"]:
+
+        next_agent = "research_agent"
+
+    elif not state["analysis"]:
+
+        next_agent = "analysis_agent"
+
+    elif not state["report"]:
+
+        next_agent = "report_agent"
+
+    else:
+
+        next_agent = "FINISH"
+
+    print(
+        f"Supervisor decision: {next_agent}"
+    )
+
+    return {
+        "next_agent": next_agent
+    }
+
+def supervisor_router(state: AgentState):
+
+    return state["next_agent"]
+
 builder = StateGraph(AgentState)
+
+
+builder.add_node(
+    "supervisor",
+    supervisor
+)
 
 
 builder.add_node(
@@ -67,25 +112,35 @@ builder.add_node(
 
 builder.add_edge(
     START,
-    "research_agent"
+    "supervisor"
 )
 
+builder.add_conditional_edges(
+    "supervisor",
+    supervisor_router,
+    {
+        "research_agent": "research_agent",
+        "analysis_agent": "analysis_agent",
+        "report_agent": "report_agent",
+        "FINISH": END
+    }
+)
 
 builder.add_edge(
     "research_agent",
-    "analysis_agent"
+    "supervisor"
 )
 
 
 builder.add_edge(
     "analysis_agent",
-    "report_agent"
+    "supervisor"
 )
 
 
 builder.add_edge(
     "report_agent",
-    END
+    "supervisor"
 )
 
 app = builder.compile()
@@ -95,7 +150,8 @@ result = app.invoke(
         "user_query": "Analyze LangGraph",
         "research": "",
         "analysis": "",
-        "report": ""
+        "report": "",
+        "next_agent": ""
     }
 )
 
