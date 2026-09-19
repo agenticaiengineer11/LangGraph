@@ -71,3 +71,19 @@ graph.add_edge("market_agent", "aggregator")
 
 graph.add_edge("aggregator", END)
 
+app = graph.compile()
+
+initial_state = {
+    "user_query": "Analyze the AI agent market",
+    "research": "",
+    "competitors": "",
+    "market": "",
+    "final_report": ""
+}
+result = app.invoke(initial_state)
+
+print("\n========================================")
+print("             FINAL REPORT")
+print("========================================")
+
+print(result["final_report"])
