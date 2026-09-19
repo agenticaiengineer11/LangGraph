@@ -6,6 +6,7 @@ class AgentState(TypedDict):
     research: str
     competitors: str
     market: str
+    final_report: str
 def research_agent(state: AgentState):
     print("\n -----research agent----------")
     return{
@@ -32,6 +33,18 @@ def market_agent(state: AgentState):
             f"market analysis for: "
             f"{state['user_query']}"
         )
+    }
+def aggregator(state: AgentState):
+    print("\n----- AGGREGATOR -----")
+
+    final_report = (
+        f"Research:\n{state['research']}\n\n"
+        f"Competitors:\n{state['competitors']}\n\n"
+        f"Market:\n{state['market']}"
+    )
+
+    return {
+        "final_report": final_report
     }
 
 graph = StateGraph(AgentState)
