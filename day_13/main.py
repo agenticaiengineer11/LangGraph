@@ -1,5 +1,5 @@
 from typing import TypedDict
-
+from langgraph.graph import StateGraph, START, END
 
 class AgentState(TypedDict):
     user_query: str
@@ -34,3 +34,10 @@ def market_agent(state: AgentState):
         )
     }
 
+graph = StateGraph(AgentState)
+
+graph.add_node("research_agent", research_agent)
+
+graph.add_node("competitor_agent", competitor_agent)
+
+graph.add_node("market_agent", market_agent)
