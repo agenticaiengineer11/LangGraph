@@ -41,3 +41,9 @@ graph.add_node("research_agent", research_agent)
 graph.add_node("competitor_agent", competitor_agent)
 
 graph.add_node("market_agent", market_agent)
+
+graph.add_edge(START, "research_agent")
+
+graph.add_edge(START, "competitor_agent")
+
+graph.add_edge(START, "market_agent")
