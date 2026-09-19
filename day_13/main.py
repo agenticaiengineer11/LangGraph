@@ -24,3 +24,13 @@ def competitor_agent(state:AgentState):
             f"{state['user_query']}"
         )
     }
+def market_agent(state: AgentState):
+    print("\n -------Market agent---------")
+
+    return{
+        "market": (
+            f"market analysis for: "
+            f"{state['user_query']}"
+        )
+    }
+
