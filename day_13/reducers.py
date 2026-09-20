@@ -108,11 +108,25 @@ builder.add_edge(
 
 app = builder.compile()
 
-result = app.invoke({
-    "user_query": "Analyze the AI agent market",
-    "findings": []
-})
+result = {"findings": []}
 
+for update in app.stream(
+    {
+        "user_query": "Analyze the AI agent market",
+        "findings": []
+    },
+    stream_mode="updates"
+):
+    print(update)
+
+    for node_update in update.values():
+
+        if node_update is None:
+            continue
+
+        result["findings"].extend(
+            node_update.get("findings", [])
+        )
 print("\n========================================")
 print("             FINAL FINDINGS")
 print("========================================")
