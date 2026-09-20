@@ -110,26 +110,23 @@ app = builder.compile()
 
 result = {"findings": []}
 
-for update in app.stream(
+
+for state in app.stream(
     {
         "user_query": "Analyze the AI agent market",
         "findings": []
     },
-    stream_mode="updates"
+    stream_mode="values"
 ):
-    print(update)
 
-    for node_update in update.values():
+    print("\n========================================")
+    print("             CURRENT STATE")
+    print("========================================")
 
-        if node_update is None:
-            continue
+    print("User Query:")
+    print(state["user_query"])
 
-        result["findings"].extend(
-            node_update.get("findings", [])
-        )
-print("\n========================================")
-print("             FINAL FINDINGS")
-print("========================================")
+    print("\nFindings:")
 
-for finding in result["findings"]:
-    print(f"\n- {finding}")
+    for finding in state["findings"]:
+        print(f"- {finding}")
