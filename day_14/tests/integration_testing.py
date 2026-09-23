@@ -49,7 +49,7 @@ def route(state: MessagesState) -> Literal["tools", "__end__"]:
     if isinstance(last_message, AIMessage) and last_message.tool_calls:
         return "tools"
 
-    return END
+    return "__end__"
 
 builder = StateGraph(MessagesState)
 
@@ -63,7 +63,7 @@ builder.add_conditional_edges(
     route,
     {
         "tools": "tools",
-        END: END,
+        "__end__": END,
     },
 )
 
