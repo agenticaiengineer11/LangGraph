@@ -42,7 +42,7 @@ def agent(state: MessagesState):
 
 tool_node = ToolNode([mock_search])
 
-def route(state: MessagesState) -> Literal["tools", END]:
+def route(state: MessagesState) -> Literal["tools", "__end__"]:
 
     last_message = state["messages"][-1]
 
