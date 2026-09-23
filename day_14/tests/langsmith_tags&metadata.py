@@ -43,11 +43,13 @@ config = {
         "agent_version": "1.0"
     }
 }
-result = app.invoke({
-    "question": "What is an AI agent?",
-    "answer": ""
-})
-
+result = app.invoke(
+    {
+        "question": "What is an AI agent?",
+        "answer": ""
+    },
+    config=config
+)
 
 print("Final answer:")
 print(result["answer"])
