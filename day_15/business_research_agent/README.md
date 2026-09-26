@@ -233,3 +233,97 @@ NFR-09	Observability
 NFR-10	Persistence & recovery
 NFR-11	Extensibility
 NFR-12	Human control
+The Most Important Architectural Boundary
+
+The complete request lifecycle becomes:
+
+Customer
+   │
+   ▼
+Frontend
+   │
+   ▼
+FastAPI
+   │
+   ▼
+Research Service
+   │
+   ▼
+LangGraph
+   │
+   ├──── Agents
+   │
+   ├──── Tools
+   │
+   ├──── LLM
+   │
+   └──── Checkpoint
+   │
+   ▼
+Analysis
+   │
+   ▼
+Human Review
+   │
+   ▼
+Report
+   │
+   ▼
+Database
+   │
+   ▼
+FastAPI
+   │
+   ▼
+Frontend
+
+And simultaneously:
+
+LangGraph
+    │
+    └──────────► LangSmith
+                  │
+                  ├── traces
+                  ├── latency
+                  ├── tokens
+                  ├── cost
+                  └── debugging
+12. Why This Architecture Is Professional
+
+We have deliberately separated:
+
+UI
+
+from
+
+API
+
+from
+
+business/application logic
+
+from
+
+LangGraph orchestration
+
+from
+
+agents
+
+from
+
+tools
+
+from
+
+external services
+
+from
+
+persistent data
+
+from
+
+observability.
+
+That gives us separation of concerns, replaceability, testability, and clearer operational boundaries.
