@@ -426,3 +426,70 @@ LangSmith
 → observability
 
 This is now a solid logical LangGraph architecture rather than just a collection of agents.
+
+
+Phase 6 — State Architecture
+
+    AgentState
+
+    Typed schemas
+
+    Reducers
+
+    State ownership
+
+    Data flow between nodes
+
+Phase 7 — Data & Tool Architecture
+
+    Research-result schemas
+
+    Tool contracts
+
+    Marketplace data sources
+
+    Validation
+
+    Data provenance/evidence
+
+Phase 8 — Reliability & Control Architecture
+
+    Retry & fallback
+
+    Timeouts
+
+    Error handling
+
+    Checkpointing
+
+    Human-in-the-loop
+
+    Revision flow
+
+Phase 9 — Repository & Application Architecture
+
+    Professional folder structure
+
+    FastAPI architecture
+
+    Services/repositories
+
+    Configuration
+
+    Testing structure
+
+    Environment management
+
+Phase 10 — Final Architecture Review
+
+    End-to-end architecture review
+
+    Identify missing components
+
+    Security & scalability review
+
+    Dependency review
+
+    Freeze the final architecture
+
+    Then move to implementation
