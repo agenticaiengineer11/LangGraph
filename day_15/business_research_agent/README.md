@@ -191,3 +191,27 @@ Error Strategy
 Repository Architecture
         ↓
 Implementation
+
+Functional Requirements — First Version
+
+So our system currently has these major functions:
+
+ID	Function
+FR-01	Accept product research request
+FR-02	Validate customer input
+FR-03	Extract normalized product profile
+FR-04	Generate research plan
+FR-05	Execute Shopify research
+FR-06	Execute eBay research
+FR-07	Execute Etsy research
+FR-08	Aggregate research
+FR-09	Analyze competition
+FR-10	Analyze demand
+FR-11	Analyze profitability
+FR-12	Analyze opportunity
+FR-13	Support human review
+FR-14	Handle revision requests
+FR-15	Generate final report
+FR-16	Track execution and failures
+FR-17	Preserve workflow state
+FR-18	Provide observable execution through LangSmith
