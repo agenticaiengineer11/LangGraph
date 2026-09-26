@@ -493,3 +493,96 @@ Phase 10 — Final Architecture Review
     Freeze the final architecture
 
     Then move to implementation
+
+    We will follow this plan:
+    Project Setup & Implementation
+
+For your professional capstone, the implementation sequence should be:
+
+    Project initialization
+
+        Repository
+
+        Virtual environment
+
+        Dependencies
+
+        .env
+
+        .gitignore
+
+        Configuration management
+
+    Define production schemas
+
+        ProductProfile
+
+        ResearchPlan
+
+        MarketplaceResearchResult
+
+        CompetitorAnalysis
+
+        DemandAnalysis
+
+        ProfitAnalysis
+
+        OpportunityAnalysis
+
+        Final ResearchReport
+
+    Implement LangGraph state
+
+        AgentState
+
+        reducers
+
+        state initialization
+
+    Implement graph nodes
+
+        Input Validation
+
+        Product Extraction
+
+        Research Planner
+
+        Shopify Research
+
+        eBay Research
+
+        Etsy Research
+
+        Research Aggregator
+
+        Analysis agents
+
+        Opportunity Analysis
+
+        Human Review
+
+        Report Generator
+
+    Implement tools
+
+        Marketplace/search tools
+
+        Data extraction
+
+        Validation
+
+        Pricing/profit calculations
+
+    Connect everything into the LangGraph
+
+        Sequential flow
+
+        Parallel execution
+
+        Conditional routing
+
+        Error paths
+
+        HITL interrupts
+
+    Testing → LangSmith → FastAPI → UI → Deployment
