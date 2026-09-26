@@ -215,3 +215,21 @@ FR-15	Generate final report
 FR-16	Track execution and failures
 FR-17	Preserve workflow state
 FR-18	Provide observable execution through LangSmith
+
+Non-Functional Specification
+
+We can now freeze the first version:
+
+ID	Requirement
+NFR-01	Reliability
+NFR-02	Fault tolerance
+NFR-03	Scalability
+NFR-04	Performance
+NFR-05	Cost control
+NFR-06	Data accuracy & provenance
+NFR-07	Security
+NFR-08	Maintainability
+NFR-09	Observability
+NFR-10	Persistence & recovery
+NFR-11	Extensibility
+NFR-12	Human control
