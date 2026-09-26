@@ -327,3 +327,102 @@ from
 observability.
 
 That gives us separation of concerns, replaceability, testability, and clearer operational boundaries.
+Complete Detailed Architecture
+
+Putting everything together:
+
+                              START
+                                │
+                                ▼
+                       Input Validation
+                                │
+                                ▼
+                       Product Extraction
+                                │
+                                ▼
+                       Research Planning
+                                │
+             ┌──────────────────┼──────────────────┐
+             ▼                  ▼                  ▼
+      Shopify Subgraph    eBay Subgraph      Etsy Subgraph
+             │                  │                  │
+             └──────────────────┼──────────────────┘
+                                ▼
+                       Research Aggregator
+                                │
+             ┌──────────────────┼──────────────────┐
+             ▼                  ▼                  ▼
+       Demand Analysis    Competitor Analysis   Profit Analysis
+             │                  │                  │
+             └──────────────────┼──────────────────┘
+                                ▼
+                     Opportunity Analysis
+                                │
+                                ▼
+                         HUMAN REVIEW
+                          /         \
+                    APPROVE         REVISE
+                       │               │
+                       │          Revision Router
+                       │               │
+                       │        ┌──────┼──────┐
+                       │        ▼      ▼      ▼
+                       │      Demand Competitor Profit
+                       │        │      │      │
+                       │        └──────┼──────┘
+                       │               ▼
+                       │        Opportunity Analysis
+                       │               │
+                       │               ▼
+                       │          HUMAN REVIEW
+                       │
+                       ▼
+                  Report Generator
+                       │
+                       ▼
+                      END
+
+Cross-cutting infrastructure
+
+┌─────────────────────────────────────────────────────┐
+│                    LangSmith                        │
+│ Tracing • Errors • Latency • Tokens • Cost • Tags  │
+└─────────────────────────────────────────────────────┘
+
+┌─────────────────────────────────────────────────────┐
+│             Persistence / Database                  │
+│ Jobs • Reports • Research • User Data • State       │
+└─────────────────────────────────────────────────────┘
+
+Architecture Decision We Have Now Made
+
+Our system will use:
+
+Main Graph
+→ orchestration
+
+Subgraphs
+→ marketplace-specific workflows
+
+Specialized Agents
+→ reasoning/analysis
+
+Deterministic Nodes
+→ validation, aggregation, routing where appropriate
+
+Reducers
+→ parallel result aggregation
+
+Conditional Edges
+→ dynamic workflow decisions
+
+HITL
+→ customer/reviewer approval
+
+Checkpointing
+→ durable/resumable workflows
+
+LangSmith
+→ observability
+
+This is now a solid logical LangGraph architecture rather than just a collection of agents.
