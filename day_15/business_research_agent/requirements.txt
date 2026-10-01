@@ -1,0 +1,13 @@
+langgraph
+langchain
+langchain-core
+langchain-groq
+langchain-community
+langsmith
+pydantic
+python-dotenv
+fastapi
+uvicorn[standard]
+httpx
+pytest
+pytest-asyncio
