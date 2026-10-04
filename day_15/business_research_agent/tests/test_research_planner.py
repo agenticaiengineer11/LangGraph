@@ -1,10 +1,12 @@
-from app.agents.research_planner import (
-    create_research_plan,
-)
+from dotenv import load_dotenv
 
+load_dotenv()
+
+from langchain_groq import ChatGroq
+from langchain_core.prompts import ChatPromptTemplate
+
+from app.agents.research_planner import create_research_plan
 from app.graph.state import ProductProfile
-
-
 def test_research_planner():
 
     product = ProductProfile(
